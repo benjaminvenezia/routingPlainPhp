@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\HelloController;
+use App\Controller\TaskController;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -10,17 +11,28 @@ use Symfony\Component\Routing\RouteCollection;
 
 require __DIR__ . '/vendor/autoload.php';
 
+
 //ROUTES
-$listRoute = new Route('/');
-
-$createRoute = new Route('/create', [], [], [], 'localhost', ['http', 'https'], ['POST', 'GET']); // /index.php?page=create => /create
-
-$showRoute = new Route('/show/{id<\d+>?100}', []); // revient à écrire '/show/{id}', ['id' => 100], ['id' => '\d+']);
-
 $helloRoute = new Route(
     '/hello/{name}', 
-    ['name' => 'World', 'toto' => 42],
+    ['name' => 'World', 'controller' => [new HelloController, 'sayHello']],
 );
+
+$listRoute = new Route('/', ['controller' => [new TaskController, 'index']]); //1.object 2. nom de la méthode 
+
+$createRoute = new Route(
+    '/create', 
+    ['controller' => [new TaskController, 'create']], 
+    [], 
+    [], 
+    'localhost', 
+    ['http', 'https'], 
+    ['POST', 'GET']
+); 
+
+$showRoute = new Route('/show/{id<\d+>?100}', 
+['controller' => [new TaskController, 'show']]
+); // revient à écrire '/show/{id}', ['id' => 100], ['id' => '\d+']);
 
 //AJOUT A LA COLLECTION 
 $collection = new RouteCollection();
@@ -39,6 +51,12 @@ $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
 
 try {
     $currentRoute = $matcher->match($pathInfo);
+
+    dump($currentRoute); //['_route => 'hello', 'name' => 'World', 'controller' => '$callable']
+
+    $controller = $currentRoute['controller'];
+
+    call_user_func($controller, $currentRoute);
     
     $page = $currentRoute['_route'];
     require_once "pages/$page.php";

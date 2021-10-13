@@ -4,8 +4,10 @@ namespace App\Controller;
 
 class HelloController {
 
-    public function sayHello() {
-        dump("Je fonctionne bien");
+    public function sayHello(array $currentRoute) {
+
+        require __DIR__ . '/../../pages.hello.php';
+        
     }
 
 }
