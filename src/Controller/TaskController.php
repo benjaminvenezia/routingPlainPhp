@@ -3,17 +3,22 @@
 namespace App\Controller;
 
 use Exception;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController {
-    //Lister, Montrer, ajouter
-
+   
+    /**
+     * @Route("/", name="list")
+     */
     public function index(array $currentRoute) {
         $generator = $currentRoute['generator'];
         // On récupère les tâches
         $data = require_once 'data.php';
         require __DIR__ . '/../../pages/list.html.php';
     }
-
+    /**
+     * @Route("/show/{id}", name="show", requirements={"id": "\d+"})
+     */
     public function show(array $currentRoute) {
         $generator = $currentRoute['generator'];
 
@@ -29,6 +34,9 @@ class TaskController {
         require __DIR__ . '/../../pages/show.html.php';
     }
 
+    /**
+     * @Route("/create", name="createß", host="localhost", schemes={"http", "https"}, methods={"GET", "POST"})
+     */
     public function create(array $currentRoute) {
         $generator = $currentRoute['generator'];
         // Si la requête arrive en POST, c'est qu'on a soumis le formulaire :

@@ -28,6 +28,16 @@ class ComposerStaticInit5fab0b8b372a8d94dce2cb08ac877034
             'Symfony\\Component\\Filesystem\\' => 29,
             'Symfony\\Component\\Config\\' => 25,
         ),
+        'P' => 
+        array (
+            'Psr\\Cache\\' => 10,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Lexer\\' => 22,
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\Annotations\\' => 28,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -70,6 +80,22 @@ class ComposerStaticInit5fab0b8b372a8d94dce2cb08ac877034
         'Symfony\\Component\\Config\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
+        ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+        ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\Annotations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
         ),
         'App\\' => 
         array (
