@@ -1,7 +1,6 @@
 <?php
 
-use App\Controller\HelloController;
-use App\Controller\TaskController;
+
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -15,14 +14,14 @@ require __DIR__ . '/vendor/autoload.php';
 //ROUTES
 $helloRoute = new Route(
     '/hello/{name}', 
-    ['name' => 'World', 'controller' => [new HelloController, 'sayHello']],
+    ['name' => 'World', 'controller' => 'App\Controller\HelloController@sayHello'],
 );
 
-$listRoute = new Route('/', ['controller' => [new TaskController, 'index']]); //1.object 2. nom de la méthode 
+$listRoute = new Route('/', ['controller' => 'App\Controller\TaskController@index']); //1.object 2. nom de la méthode 
 
 $createRoute = new Route(
     '/create', 
-    ['controller' => [new TaskController, 'create']], 
+    ['controller' => 'App\Controller\TaskController@create'], 
     [], 
     [], 
     'localhost', 
@@ -31,7 +30,7 @@ $createRoute = new Route(
 ); 
 
 $showRoute = new Route('/show/{id<\d+>?100}', 
-['controller' => [new TaskController, 'show']]
+['controller' => 'App\Controller\TaskController@show']
 ); // revient à écrire '/show/{id}', ['id' => 100], ['id' => '\d+']);
 
 //AJOUT A LA COLLECTION 
@@ -52,16 +51,20 @@ $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
 try {
     $currentRoute = $matcher->match($pathInfo);
 
-    dump($currentRoute); //['_route => 'hello', 'name' => 'World', 'controller' => '$callable']
-
     $controller = $currentRoute['controller'];
 
-    call_user_func($controller, $currentRoute);
+    $currentRoute['generator'] = $generator;
+
+    $className = substr($controller, 0, strpos($controller, '@'));
     
-    $page = $currentRoute['_route'];
-    require_once "pages/$page.php";
+    $methodName = substr($controller, strpos($controller, '@') + 1);
+
+    $instance = new $className();
+
+    call_user_func([$instance, $methodName], $currentRoute);
+    
 } catch(ResourceNotFoundException $e){
-    require 'pages/404.php';
+    require 'pages/404.html.php';
     return;
 }
 
